@@ -45,4 +45,4 @@ To run the application's tests, all you need to do is executing the command
 
 ## Examples of use with Postman
 
-You can test the endpoints with Postman by importing the file 'to-do list.postman_collection.json' located in root folder. 
+You can test the endpoints with Postman by importing the file to-do [list.postman_collection.json](https://github.com/GuilleKalniker/todo-list/blob/master/to-do%20list.postman_collection.json) located in root folder. 
