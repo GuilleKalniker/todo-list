@@ -14,10 +14,12 @@ If you have any doubts on how to install these tools, you can refer to the offic
 
 Later, you can validate that the configuration was successful by opening a command prompt (cmd) and executing the following commands:
 * java --version
-** You should see something like this:
+ * You should see something like this:
+    
 ![image](https://github.com/GuilleKalniker/todo-list/assets/63016011/d8695eb0-ff9c-4553-938e-63961e9ea997)
 * mvn --version
-** You should see something like this:
+ * You should see something like this:
+  
 ![image](https://github.com/GuilleKalniker/todo-list/assets/63016011/441139fa-708f-42ec-80c6-ffe9235fc608)
 
 ## Installation
