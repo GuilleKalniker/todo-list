@@ -1,0 +1,9 @@
+package com.example.todolist.tsk.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.todolist.tsk.model.Task;
+
+public interface TaskRepository extends JpaRepository<Task,Long>{
+
+}
