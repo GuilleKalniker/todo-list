@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,13 +40,17 @@ public class TaskController {
     }
     
     @GetMapping(value = "/tasks/{id}")
-    public TaskDTO getTaskById(@PathVariable Long id) {
+    public ResponseEntity<?> getTaskById(@PathVariable Long id) {
     	
-    	logger.info("Getting task: " + id);
-    	Task task;
-    	task = taskRepository.findById(id).orElseThrow(() -> new InvalidParameterException("There is no task with id: " + id));
-    
-        return TaskDTO.fromEntity(task);
+    	 try {
+    		 logger.info("Getting task: " + id);
+	    	 Task task;
+	    	 task = taskRepository.findById(id).orElseThrow(() -> new InvalidParameterException("There is no task with id: " + id));
+             return new ResponseEntity<>(TaskDTO.fromEntity(task), HttpStatus.OK);
+         } catch (Exception e) {
+        	 String errorMessage = "Couldn't get the requested task: " + e.getMessage();
+             return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+         }
     }
    
    @PostMapping(value = "/tasks")
@@ -61,23 +67,35 @@ public class TaskController {
     }
     
    @PutMapping(value = "/tasks/{id}")
-   public TaskDTO updateTaskById(@PathVariable Long id, @RequestBody TaskDTO dto) {
+   public ResponseEntity<?> updateTaskById(@PathVariable Long id, @RequestBody TaskDTO dto) {
 	   
-	   logger.info("Updating task with id: " + id);
-	   Task task = taskRepository.findById(id).orElseThrow(() -> new InvalidParameterException("There is no task with id: " + id));
-	   populate(task, dto);
-       taskRepository.save(task);
-	   
-       return TaskDTO.fromEntity(task);
+  	 try {
+  		 logger.info("Updating task with id: " + id);
+  		 Task task = taskRepository.findById(id).orElseThrow(() -> new InvalidParameterException("There is no task with id: " + id));
+  		 populate(task, dto);
+         taskRepository.save(task);
+         return new ResponseEntity<>(TaskDTO.fromEntity(task), HttpStatus.OK);
+         
+     } catch (Exception e) {
+    	 String errorMessage = "Couldn't update task: " + e.getMessage();
+         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+     }
     }
     
    @DeleteMapping(value = "/tasks/{id}")
-   public String deleteTaskById(@PathVariable Long id) {
-    	
-	   logger.info("Deleting task with id: " + id);
-		
-	   taskRepository.deleteById(id);
-	   return "Successfully deleted task with id: " + id;
+   public ResponseEntity<?> deleteTaskById(@PathVariable Long id) {
+	   
+	   try {
+		   logger.info("Deleting task with id: " + id);
+		   Task task = taskRepository.findById(id).orElseThrow(() -> new InvalidParameterException("There is no task with id: " + id));
+		   
+		   taskRepository.delete(task);
+	       return new ResponseEntity<>( "Successfully deleted task with id: " + id, HttpStatus.OK);
+	         
+	     } catch (Exception e) {
+	    	 String errorMessage = "Couldn't delete task: " + e.getMessage();
+	         return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+	     } 
     }
    
    
